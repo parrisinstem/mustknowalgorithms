@@ -1,5 +1,4 @@
 // Package declaration for the 'mergeintervals' package
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +9,7 @@ class Task {
     int end;
     int load;
 
+    // Constructor to initialize the Task with start, end, and load values
     Task(int start, int end, int load) {
         this.start = start;
         this.end = end;
@@ -32,6 +32,7 @@ public class MaximumCPULoad {
         int maxCPULoad = 0; // Initialize the maximum CPU load as 0
         int currentCPULoad = 0; // Initialize the current CPU load as 0
 
+        // Iterate through the sorted tasks
         for (int i = 0; i < tasks.size(); i++) {
             Task currentTask = tasks.get(i); // Get the current task
 

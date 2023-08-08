@@ -1,0 +1,52 @@
+// Shared Buffer
+buffer: array of fixed size
+bufferSize: maximum size of the buffer
+count: variable to keep track of the number of items in the buffer
+
+// Semaphores
+empty: semaphore initialized with bufferSize // Counts the number of empty slots in the buffer
+full: semaphore initialized with 0 // Counts the number of filled slots in the buffer
+mutex: semaphore initialized with 1 // Ensures mutual exclusion on the buffer
+
+// Producer function
+producer():
+    while true:
+        item = produceItem() // Produce an item
+
+        empty.acquire() // Wait until there is space in the buffer
+        mutex.acquire() // Acquire the lock to access the buffer
+
+        // Add the item to the buffer
+        buffer[count] = item
+        count = count + 1
+
+        mutex.release() // Release the lock
+        full.release() // Notify consumers that there is an item available
+
+// Consumer function
+consumer():
+    while true:
+        full.acquire() // Wait until there is an item in the buffer
+        mutex.acquire() // Acquire the lock to access the buffer
+
+        // Remove an item from the buffer
+        item = buffer[count - 1]
+        count = count - 1
+
+        mutex.release() // Release the lock
+        empty.release() // Notify producers that there is an empty slot in the buffer
+
+        consumeItem(item) // Consume the item
+
+// Main function
+main():
+    initialize buffer, semaphores, and other variables
+
+    create producer threads, each running the producer function
+    create consumer threads, each running the consumer function
+
+    start producer threads
+    start consumer threads
+
+    wait for all producer threads to finish
+    wait for all consumer threads to finish

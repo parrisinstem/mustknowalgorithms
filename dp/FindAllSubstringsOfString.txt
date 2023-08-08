@@ -1,0 +1,89 @@
+package dp;
+
+function findSmallestStringContainingAll(words):
+    // Build the trie from the words
+    trieRoot = buildTrie(words)
+
+    // Create a directed graph from the trie
+    graph = buildGraph(trieRoot)
+
+    // Find the shortest path containing all nodes (words) in the graph
+    shortestPath = findShortestPath(graph)
+
+    // Return the smallest string containing all words
+    return shortestPath
+
+function buildTrie(words):
+    // Initialize the root of the trie as an empty node
+    trieRoot = TrieNode()
+
+    // Iterate over each word in the input array words
+    for word in words:
+        // Start building the trie from the root for each word
+        currentNode = trieRoot
+        for char in word:
+            // Check if the current character exists as a child of the current node
+            if char not in currentNode.children:
+                // If not, create a new node for the character and add it as a child of the current node
+                currentNode.children[char] = TrieNode()
+            // Move to the next node (character) in the trie
+            currentNode = currentNode.children[char]
+
+    // Return the root of the trie
+    return trieRoot
+
+function buildGraph(trieRoot):
+    // Initialize an empty directed graph
+    graph = Graph()
+
+    // Perform a Depth-First Search (DFS) to build the directed graph
+    dfs(trieRoot, graph)
+
+    // Return the built graph
+    return graph
+
+function dfs(currentNode, graph):
+    // Base case: If the current node is a leaf node, return
+    if currentNode is a leaf node:
+        return
+
+    // Iterate over each child of the current node
+    for childNode in currentNode.children:
+        // Add a directed edge from the current node to the child node in the graph
+        graph.addEdge(currentNode, childNode)
+
+        // Recursively perform DFS on the child node
+        dfs(childNode, graph)
+
+function findShortestPath(graph):
+    // Initialize a queue for Breadth-First Search (BFS)
+    queue = Queue()
+
+    // Initialize a set to keep track of visited nodes during BFS
+    visited = Set()
+
+    // Start BFS from the root of the graph
+    queue.enqueue(root)
+    visited.add(root)
+
+    // Initialize an empty string to store the smallest string containing all words
+    smallestString = ""
+
+    // Perform BFS until the queue is empty (all nodes are visited)
+    while queue is not empty:
+        // Dequeue the front node from the queue
+        currentNode = queue.dequeue()
+
+        // Append the current character to the smallestString
+        smallestString.append(currentNode.character)
+
+        // Iterate over the neighbors (children) of the current node in the graph
+        for neighbor in graph.getNeighbors(currentNode):
+            // Check if the neighbor node is not visited yet
+            if neighbor not in visited:
+                // Enqueue the neighbor node in the queue and mark it as visited
+                queue.enqueue(neighbor)
+                visited.add(neighbor)
+
+    // Return the smallest string containing all words
+    return smallestString
